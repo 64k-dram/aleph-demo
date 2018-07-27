@@ -1,0 +1,57 @@
+<html>
+<head>
+    <title>Country Data</title>
+    <style type="text/css">
+        body{max-width:150ex; font-family:monospace; font-size:1.4em;}
+        span{display:inline-block; width:20ex;}
+        a{font-weight:bold; text-decoration:none;
+            color:black; border:1px solid black;
+            border-radius:0.5ex; padding:0.25ex;}
+        #infobox{border:2px solid #333;}
+        .row{max-width: 150ex; padding:0.33em;}
+        .row:nth-child(odd){background-color:#ddd;}
+        .cur-rpp{background-color:#ccc; }
+        #nextpage{display:inline-block; float:right;}
+    </style>
+</head>
+
+
+<body>
+    <h2> Countries Listing (page {{page}} of {{maxid//rpp}})</h2>
+    <h3> results per page: 
+        <a href="/?page=1&rpp=10" {{'class="cur-rpp"'|safe if rpp==10 else ''}}>10</a>
+        <a href="/?page=1&rpp=20" {{'class="cur-rpp"'|safe if rpp==20 else ''}}>20</a>
+        <a href="/?page=1&rpp=50" {{'class="cur-rpp"'|safe if rpp==50 else ''}}>50</a>
+    </h3>
+
+    {# DATA TABLE #}
+    <div id="infobox">
+        {# table headers #}
+        <div class="row" style="font-weight:bold; font-variant:small-caps;">
+            <span> CC </span> 
+            <span style="width:50ex;"> Name </span> 
+            <span> Area </span> 
+            <span> Population </span> 
+        </div>
+    
+    {# print row for each country on this page #}
+    {% for data in countries %}
+        <div class="row">
+            <span> {{data['code']}} </span> 
+            <span style="width:50ex;"> {{data['name']}} </span> 
+            <span> {{data['area']}} </span> 
+            <span> {{data['population']}} </span> 
+        </div>
+    {% endfor %}
+    </div>
+
+    {# PREV and NEXT page links #}
+    <div style="margin-top:1em;">
+        {# only show "prev" link if we're not on page 1 #}
+        {% if page > 1 %} <a href="/?page={{page-1}}&rpp={{rpp}}"> Prev </a> {% endif  %}
+
+        {# only show "next" link if we're not on last page #}
+        {% if (page*rpp) < (maxid-rpp) %} <a href="/?page={{page+1}}&rpp={{rpp}}" id="nextpage"> Next </a> {% endif %}
+    </div>
+</body>
+</html>
